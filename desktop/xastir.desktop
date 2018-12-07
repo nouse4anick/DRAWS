@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Exec=xastir
+Name=fldigi
+Comment=fldigi
+Icon=/usr/share/xastir/symbols/icon.png
+Path=/home/pi
+#Terminal=true
+Categories=HamRadio
+Keywords=Ham Radio
+Name[en_US]=Xastir
+Comment[en_US]=xastir

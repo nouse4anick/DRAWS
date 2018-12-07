@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/pi/FDLog/fdlog.py
+Name=FDLog
+Comment=FDLog
+Icon=accessories-text-editor
+Path=/home/pi/FDLog
+Terminal=true
+Categories=HamRadio
+Keywords=Ham Radio
+Name[en_US]=FDLog
+Comment[en_US]=FDLog

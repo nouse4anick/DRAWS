@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Exec=fldigi
+Name=fldigi
+Comment=fldigi
+Icon=/usr/local/share/pixmaps/fldigi.xpm
+Path=/home/pi
+#Terminal=true
+Categories=HamRadio
+Keywords=Ham Radio
+Name[en_US]=Fldigi
