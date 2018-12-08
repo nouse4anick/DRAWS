@@ -106,7 +106,7 @@ echo
 echo "checking DRAWS eeprom version...."
 draws="Digital Radio Amateur Work Station"
 outvar=`cat /sys/firmware/devicetree/base/hat/product`
-if [ "$draws" == "$outvar"]
+if [ "$draws" == "$outvar" ]
 then
 echo "yep, you have a DRAWS Hat"
 else
