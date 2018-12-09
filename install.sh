@@ -4,6 +4,17 @@
 # Note: this is for the raspberry pi with a DRAWS Hat from nwdigitalradio
 #taken from the NW Digital Radio group wiki on installing fldigi
 
+# set flags first taken from http://www.kk5jy.net/fldigi-build/:
+export CXXFLAGS='-O2 -march=native -mtune=native'
+export CFLAGS='-O2 -march=native -mtune=native'
+
+Build_Install (){
+	#note: static linking enabled, possibly do not need it as other libraries get loaded.
+	./configure --enable-static
+	make
+	sudo make install
+}
+
 FLDIGICUR=4.0.18
 FLAMPCUR=2.2.03
 FLMSGCUR=4.0.7
@@ -43,6 +54,9 @@ echo
 sudo apt-get update
 sudo apt-get build-dep fldigi -y
 
+#apparently some files are missing, adding in a bunch of dependencies that might be needed from http://www.kk5jy.net/fldigi-build/:
+sudo apt-get install libfltk1.3-dev libjpeg9-dev libxft-dev libxinerama-dev libxcursor-dev libsndfile1-dev libsamplerate0-dev portaudio19-dev libusb-1.0-0-dev libpulse-dev
+
 #make sure in home directory
 cd ~
 #grab the scripts
@@ -62,9 +76,7 @@ wget -N https://sourceforge.net/projects/fldigi/files/fldigi/fldigi-$FLDIGICUR.t
 tar -zxvsf fldigi-$FLDIGICUR.tar.gz
 cd fldigi-$FLDIGICUR
 # now we can configure and install
-./configure
-make
-sudo make install
+Build_Install
 # cpy the desktop shortcuts
 cp data/fldigi.desktop ~/Desktop/
 cp data/flarq.desktop ~/Desktop/
@@ -73,18 +85,14 @@ cd ~
 wget -N https://sourceforge.net/projects/fldigi/files/flamp/flamp-$FLAMPCUR.tar.gz
 tar -zxvsf flamp-$FLAMPCUR.tar.gz
 cd flamp-$FLAMPCUR
-./configure
-make
-sudo make install
+Build_Install
 cp data/flamp.desktop ~/Desktop
 #install flmsg
 cd ~
 wget -N https://sourceforge.net/projects/fldigi/files/flmsg/flmsg-$FLMSGCUR.tar.gz
 tar -zxvsf flmsg-$FLMSGCUR.tar.gz
 cd flmsg-$FLMSGCUR
-./configure
-make
-sudo make install
+Build_Install
 cp data/flmsg.desktop ~/Desktop/
 
 #install xastir, gps and chrony
