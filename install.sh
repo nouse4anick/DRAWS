@@ -122,7 +122,7 @@ echo
 #check for DRAWS:
 echo "checking DRAWS eeprom version...."
 draws="Digital Radio Amateur Work Station"
-outvar=`cat /sys/firmware/devicetree/base/hat/product`
+outvar=$(tr -d '\0' </sys/firmware/devicetree/base/hat/product)
 if [ "$draws" == "$outvar" ]
 then
 	echo "yep, you have a DRAWS Hat"
