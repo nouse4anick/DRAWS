@@ -4,15 +4,24 @@
 # Note: this is for the raspberry pi with a DRAWS Hat from nwdigitalradio
 #taken from the NW Digital Radio group wiki on installing fldigi
 
+# Testing Variable: 1 for initial trial and tests/config file updates (does NOT copy config files)
+TESTING=1
 # set flags first taken from http://www.kk5jy.net/fldigi-build/:
 export CXXFLAGS='-O2 -march=native -mtune=native'
 export CFLAGS='-O2 -march=native -mtune=native'
 
 Build_Install (){
 	#note: static linking enabled, possibly do not need it as other libraries get loaded.
-	./configure --enable-static
+	#./configure --enable-static
+	./configure
+	read -n 1 -s -r -p "Press any key to continue"
+	echo
 	make
+	read -n 1 -s -r -p "Press any key to continue"
+	echo
 	sudo make install
+	read -n 1 -s -r -p "Press any key to continue"
+	echo
 }
 
 FLDIGICUR=4.0.18
@@ -65,10 +74,6 @@ git clone https://github.com/nwdigitalradio/n7nix
 cd n7nix/config
 sudo ./core_install.sh
 
-#copy the 'default' config file
-cd ~
-cp ./DRAWS/direwolf.conf ./direwolf.conf
-
 #note: install script sets audio levels automatiaclly
 
 #get current version of fldigi
@@ -77,6 +82,7 @@ tar -zxvsf fldigi-$FLDIGICUR.tar.gz
 cd fldigi-$FLDIGICUR
 # now we can configure and install
 Build_Install
+
 # cpy the desktop shortcuts
 cp data/fldigi.desktop ~/Desktop/
 cp data/flarq.desktop ~/Desktop/
@@ -98,13 +104,16 @@ cp data/flmsg.desktop ~/Desktop/
 #install xastir, gps and chrony
 sudo apt-get install xastir gpsd gpsd-clients python-gps pps-tools libgps-dev chrony -y
 
-#copy all config files
-cd ~
-cp ./DRAWS/fldigi/fldigi_def.xml ./.fldigi/fldigi_def.xml
-cp ./DRAWS/xastir/* ./.xastir/config
-sudo cp ./DRAWS/gpsd /etc/default/gpsd
-sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
-
+if [ $TESTING == 0 ]
+then
+	#copy all config files
+	cd ~
+	cp ./DRAWS/direwolf.conf ./direwolf.conf
+	cp ./DRAWS/fldigi/fldigi_def.xml ./.fldigi/fldigi_def.xml
+	cp ./DRAWS/xastir/* ./.xastir/config
+	sudo cp ./DRAWS/gpsd /etc/default/gpsd
+	sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
+fi
 #enable gps daemon:
 sudo systemctl enable gpsd && sudo systemctl restart gpsd
 echo "GPS daemon ready, run 'gpsmon' to check gps"
@@ -116,9 +125,9 @@ draws="Digital Radio Amateur Work Station"
 outvar=`cat /sys/firmware/devicetree/base/hat/product`
 if [ "$draws" == "$outvar" ]
 then
-echo "yep, you have a DRAWS Hat"
+	echo "yep, you have a DRAWS Hat"
 else
-echo "nope, you do not have a DRAWS Hat! Modifications this script made may NOT work!!"
+	echo "nope, you do not have a DRAWS Hat! Modifications this script made may NOT work!!"
 fi
 
 
