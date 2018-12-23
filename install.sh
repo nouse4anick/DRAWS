@@ -64,7 +64,7 @@ sudo apt-get update
 sudo apt-get build-dep fldigi -y
 
 #apparently some files are missing, adding in a bunch of dependencies that might be needed from http://www.kk5jy.net/fldigi-build/:
-sudo apt-get install libfltk1.3-dev libjpeg9-dev libxft-dev libxinerama-dev libxcursor-dev libsndfile1-dev libsamplerate0-dev portaudio19-dev libusb-1.0-0-dev libpulse-dev
+sudo apt-get install libfltk1.3-dev libjpeg9-dev libxft-dev libxinerama-dev libxcursor-dev libsndfile1-dev libsamplerate0-dev portaudio19-dev libusb-1.0-0-dev libpulse-dev libmotif-dev gpsman gpsd gpsd-clients python-gps pps-tools libgps-dev chrony -y
 
 #make sure in home directory
 cd ~
@@ -102,8 +102,35 @@ cd flmsg-$FLMSGCUR
 Build_Install
 cp data/flmsg.desktop ~/Desktop/
 
-#install xastir, gps and chrony
-sudo apt-get install xastir gpsd gpsd-clients python-gps pps-tools libgps-dev chrony -y
+#install xastir
+#remove image magick:
+sudo apt-get remove imagemagick -y
+sudo apt-get build-dep imagemagick
+cd ~
+git clone https://github.com/imagemagick/imagemagick.git
+cd ImageMagick
+./configure
+make
+sudo make install
+sudo ldconfig
+identify -version
+read -n 1 -s -r -p "Please check that imagemagick version is 7.+, Press any key to continue"
+echo
+cd ~
+git clone https://github.com/xastir/xastir
+cd xastir
+./bootstrap.sh
+# check for config.cashe file and remove if present
+if [[ -e "./config.cache" ]]; then
+	rm ./config.cache
+fi
+./configure
+#ask if it configured correctly
+read -n 1 -s -r -p "Check configuration, Press any key to continue or ctrl+c to exit"
+echo
+make
+sudo make install
+
 
 if [ $TESTING == 0 ]
 then
@@ -112,9 +139,10 @@ then
 	cp ./DRAWS/direwolf.conf ./direwolf.conf
 	cp ./DRAWS/fldigi/fldigi_def.xml ./.fldigi/fldigi_def.xml
 	cp ./DRAWS/xastir/* ./.xastir/config
-	sudo cp ./DRAWS/gpsd /etc/default/gpsd
-	sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
+
 fi
+sudo cp ./DRAWS/gpsd /etc/default/gpsd
+sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
 #enable gps daemon:
 sudo systemctl enable gpsd && sudo systemctl restart gpsd
 echo "GPS daemon ready, run 'gpsmon' to check gps"
