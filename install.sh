@@ -1,5 +1,5 @@
 #!/bin/bash
-#version: 1.1.1
+#version: 1.1.2
 # updated fresh install script, now installs everything needed for a portable digital station
 # Note: this is for the raspberry pi with a DRAWS Hat from nwdigitalradio
 #taken from the NW Digital Radio group wiki on installing fldigi
@@ -10,6 +10,10 @@ TESTING=1
 export CXXFLAGS='-O2 -march=native -mtune=native'
 export CFLAGS='-O2 -march=native -mtune=native'
 
+############################
+## BUILD INSTALL FUNCTION ##
+############################
+# pauses between configure/make/install to allow user to double check install progress
 Build_Install (){
 	#note: static linking enabled, possibly do not need it as other libraries get loaded.
 	#./configure --enable-static
@@ -24,6 +28,9 @@ Build_Install (){
 	echo
 }
 
+######################
+## Current versions ##
+######################
 FLDIGICUR=4.0.18
 FLAMPCUR=2.2.03
 FLMSGCUR=4.0.7
@@ -35,6 +42,9 @@ echo "flmsg: " $FLMSGCUR
 read -n 1 -s -r -p "Press any key to continue, ctrl+c to quit"
 echo
 
+####################
+## Enable Sources ##
+####################
 #BEFORE INSTALL, get all the deps for it!!! this takes editing the source list file and other fun stuff
 sudo cp /etc/apt/sources.list /etc/apt/sources.$FLDIGICUR.bkup
 #dirty way of doing it
@@ -44,9 +54,10 @@ deb-src http://archive.raspbian.org/raspbian/ stretch main contrib non-free rpi
 " | sudo tee /etc/apt/sources.list
 echo "sources.list backed up to sources."$FLDIGICUR".bkup, please add any other sources from the old file to the new one that are not already in there"
 
+############################
+## Double check dtoverlay ##
+############################
 #check the dtoverlay for draws, if not then prompt the user and open the file for editing
-#NEW ISSUE: with compass 4.9.80-v7 udrc is broken! must add 'dtoverlay=' and 'dtoverlay=udrc' to the END of /boot/config.txt
-#check for dtoverlay:
 if !(grep -x "dtoverlay=" /boot/config.txt && grep -x "dtoverlay=draws" /boot/config.txt); then
 	echo "draws not detected, opening boot config for editing, page down to the end and change 'udrc' to 'draws'"
 	echo
@@ -58,7 +69,9 @@ else
 fi
 read -n 1 -s -r -p "Press any key to continue"
 echo
-
+################
+## DEP & LIBS ##
+################
 #update and build the deps for fldigi
 sudo apt-get update
 sudo apt-get build-dep fldigi -y
@@ -75,26 +88,28 @@ cd n7nix/config
 sudo ./core_install.sh
 
 #note: install script sets audio levels automatiaclly
-
-#get current version of fldigi
+###############
+## FLDIGI    ##
+###############
 cd ~
 wget https://sourceforge.net/projects/fldigi/files/fldigi/fldigi-$FLDIGICUR.tar.gz
 tar -zxvsf fldigi-$FLDIGICUR.tar.gz
 cd fldigi-$FLDIGICUR
-# now we can configure and install
 Build_Install
-
-# cpy the desktop shortcuts
 cp data/fldigi.desktop ~/Desktop/
 cp data/flarq.desktop ~/Desktop/
-#install flamp
+###############
+## FLAMP     ##
+###############
 cd ~
 wget -N https://sourceforge.net/projects/fldigi/files/flamp/flamp-$FLAMPCUR.tar.gz
 tar -zxvsf flamp-$FLAMPCUR.tar.gz
 cd flamp-$FLAMPCUR
 Build_Install
 cp data/flamp.desktop ~/Desktop
-#install flmsg
+###############
+## FLMSG     ##
+###############
 cd ~
 wget https://sourceforge.net/projects/fldigi/files/flmsg/flmsg-$FLMSGCUR.tar.gz
 tar -zxvsf flmsg-$FLMSGCUR.tar.gz
@@ -102,8 +117,10 @@ cd flmsg-$FLMSGCUR
 Build_Install
 cp data/flmsg.desktop ~/Desktop/
 
-#install xastir
-#remove image magick:
+###############
+## XASTIR    ##
+###############
+#remove image magick and install from source:
 sudo apt-get remove imagemagick -y
 sudo apt-get build-dep imagemagick
 cd ~
@@ -120,10 +137,6 @@ cd ~
 git clone https://github.com/xastir/xastir
 cd xastir
 ./bootstrap.sh
-# check for config.cashe file and remove if present
-if [[ -e "./config.cache" ]]; then
-	rm ./config.cache
-fi
 ./configure
 #ask if it configured correctly
 read -n 1 -s -r -p "Check configuration, Press any key to continue or ctrl+c to exit"
@@ -131,7 +144,9 @@ echo
 make
 sudo make install
 
-
+##################
+## config files ##
+##################
 if [ $TESTING == 0 ]
 then
 	#copy all config files
@@ -143,7 +158,9 @@ then
 fi
 sudo cp ./DRAWS/gpsd /etc/default/gpsd
 sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
-#enable gps and chrony daemon:
+#########################
+## GPS & CHRONY DAEMON ##
+#########################
 sudo systemctl enable gpsd && sudo systemctl restart gpsd
 sudo systemctl enable chrony && sudo systemctl restart chrony && systemctl status chrony
 
@@ -161,5 +178,3 @@ then
 else
 	echo "nope, you do not have a DRAWS Hat! Modifications this script made may NOT work!!"
 fi
-
-
