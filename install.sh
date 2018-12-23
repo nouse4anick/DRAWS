@@ -75,9 +75,9 @@ echo
 #update and build the deps for fldigi
 sudo apt-get update
 sudo apt-get build-dep fldigi -y
-
+sudo apt-get remove imagemagick -y
 #apparently some files are missing, adding in a bunch of dependencies that might be needed from http://www.kk5jy.net/fldigi-build/:
-sudo apt-get install libfltk1.3-dev libjpeg9-dev libxft-dev libxinerama-dev libxcursor-dev libsndfile1-dev libsamplerate0-dev portaudio19-dev libusb-1.0-0-dev libpulse-dev libmotif-dev gpsman gpsd gpsd-clients python-gps pps-tools libgps-dev chrony -y
+sudo apt-get install libfltk1.3-dev libjpeg9-dev libxft-dev libxinerama-dev libxcursor-dev libsndfile1-dev libsamplerate0-dev portaudio19-dev libusb-1.0-0-dev libpulse-dev libmotif-dev gpsman gpsd gpsd-clients python-gps pps-tools libgps-dev chrony graphicsmagick libgraphicsmagick1-dev festival festival-dev shapelib libshp-dev libpcre3-dev libproj-dev libdb-dev python-dev libwebp-dev libgeotiff-dev -y
 
 #make sure in home directory
 cd ~
@@ -120,19 +120,7 @@ cp data/flmsg.desktop ~/Desktop/
 ###############
 ## XASTIR    ##
 ###############
-#remove image magick and install from source:
-sudo apt-get remove imagemagick -y
-sudo apt-get build-dep imagemagick
-cd ~
-git clone https://github.com/imagemagick/imagemagick.git
-cd ImageMagick
-./configure
-make
-sudo make install
-sudo ldconfig
-identify -version
-read -n 1 -s -r -p "Please check that imagemagick version is 7.+, Press any key to continue"
-echo
+#note: use graphicsmagick, install above with all dep, remove imagemagick
 cd ~
 git clone https://github.com/xastir/xastir
 cd xastir
