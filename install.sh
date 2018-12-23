@@ -77,7 +77,8 @@ sudo ./core_install.sh
 #note: install script sets audio levels automatiaclly
 
 #get current version of fldigi
-wget -N https://sourceforge.net/projects/fldigi/files/fldigi/fldigi-$FLDIGICUR.tar.gz
+cd ~
+wget https://sourceforge.net/projects/fldigi/files/fldigi/fldigi-$FLDIGICUR.tar.gz
 tar -zxvsf fldigi-$FLDIGICUR.tar.gz
 cd fldigi-$FLDIGICUR
 # now we can configure and install
@@ -95,7 +96,7 @@ Build_Install
 cp data/flamp.desktop ~/Desktop
 #install flmsg
 cd ~
-wget -N https://sourceforge.net/projects/fldigi/files/flmsg/flmsg-$FLMSGCUR.tar.gz
+wget https://sourceforge.net/projects/fldigi/files/flmsg/flmsg-$FLMSGCUR.tar.gz
 tar -zxvsf flmsg-$FLMSGCUR.tar.gz
 cd flmsg-$FLMSGCUR
 Build_Install
