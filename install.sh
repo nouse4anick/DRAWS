@@ -143,8 +143,10 @@ then
 fi
 sudo cp ./DRAWS/gpsd /etc/default/gpsd
 sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
-#enable gps daemon:
+#enable gps and chrony daemon:
 sudo systemctl enable gpsd && sudo systemctl restart gpsd
+sudo systemctl enable chrony && sudo systemctl restart chrony && systemctl status chrony
+
 echo "GPS daemon ready, run 'gpsmon' to check gps"
 read -n 1 -s -r -p "Press any key to continue"
 echo
