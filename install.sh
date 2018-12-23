@@ -148,6 +148,7 @@ sudo systemctl enable gpsd && sudo systemctl restart gpsd
 sudo systemctl enable chrony && sudo systemctl restart chrony && systemctl status chrony
 
 echo "GPS daemon ready, run 'gpsmon' to check gps"
+echo "Chrony is ready, run 'chronyc sources' to verify"
 read -n 1 -s -r -p "Press any key to continue"
 echo
 #check for DRAWS:
