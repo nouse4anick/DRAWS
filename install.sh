@@ -17,12 +17,10 @@ QUICK=0
 export CXXFLAGS='-O2 -march=native -mtune=native'
 export CFLAGS='-O2 -march=native -mtune=native'
 
-
-
-
 Usage (){
 	echo "usage: install.sh (args)
 	Args can be:
+	source : enables sources and installs base/essectial libraries
 	FLDIGI : installs fldigi
 	FLAMP : installs flamp
 	FLMSG : installs flmsg
@@ -32,7 +30,6 @@ Usage (){
 	-h shows this help and exits"
 	exit
 }
-
 
 ############################
 ## BUILD INSTALL FUNCTION ##
@@ -57,7 +54,6 @@ Press_Any_key (){
 		echo
 	fi
 }
-
 ####################
 ## Enable Sources ##
 ####################
@@ -76,6 +72,13 @@ deb-src http://archive.raspbian.org/raspbian/ stretch main contrib non-free rpi
 	else
 		echo "sources already enabled"
 	fi
+	# always update and upgrade:
+	sudo apt-get update
+	sudo apt-get upgrade -y
+	# favorate apps:
+	sudo apt-get install geany -y
+	# Needed items from the nwdigital scripts:
+	sudo apt-get install rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev -y
 	Press_Any_key
 }
 ############################
@@ -104,7 +107,6 @@ Check_overlay () {
 	fi
 	Press_Any_key
 }
-
 ###############
 ## FLDIGI    ##
 ###############
@@ -227,6 +229,7 @@ Xastir_install () {
 FLDIGICUR=4.0.18
 FLAMPCUR=2.2.03
 FLMSGCUR=4.0.7
+echo "To view optional arguments use './install.sh -h'"
 echo "This script will install all software nessecay for the DRAWS, it will pull down and run the NW digital radio script from the github repository"
 echo "This script will also install the following versions of fldigi/flamp/flmsg:"
 echo "fldigi: " $FLDIGICUR
@@ -235,35 +238,26 @@ echo "flmsg: " $FLMSGCUR
 read -n 1 -s -r -p "Press any key to continue, ctrl+c to quit"
 echo
 
-##################
-## update/grade ##
-##################
-# always update and upgrade:
-sudo apt-get update
-sudo apt-get upgrade -y
-# favorate apps:
-sudo apt-get install geany -y
-# Needed items from the nwdigital scripts:
-sudo apt-get install rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev -y
-
 ############
 ## params ##
 ############
 
 # params are:
+# - source
 # - fldigi
 # - flmsg
 # - flamp
 # - gps
 # - xastir (both xastir and direwolf
 # - chrony
-# 
+#  -h  help file
 # if no params install everything
 
 if [ $# -gt 0 ]; then
 	#loop through commands and get them
 	while [ "$1" != "" ]; do
 		case $1 in
+			"source" ) Enable_Sources ;;
 			"FLDIGI" ) FLDIGI_source ;;
 			"FLAMP" ) FLAMP_source ;;
 			"FLMSG" ) FLMSG_source ;;
@@ -275,6 +269,7 @@ if [ $# -gt 0 ]; then
 		shift
 	done
 else
+	echo "installing full suite"
 	# install everything:
 	Enable_Sources
 	Check_overlay
