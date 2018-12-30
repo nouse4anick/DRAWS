@@ -74,20 +74,42 @@ echo
 ################
 #update and build the deps for fldigi
 sudo apt-get update
-sudo apt-get build-dep fldigi -y
+sudo apt-get build-dep fldigi gpsd -y
 sudo apt-get remove imagemagick -y
-#apparently some files are missing, adding in a bunch of dependencies that might be needed from http://www.kk5jy.net/fldigi-build/:
-sudo apt-get install libfltk1.3-dev libjpeg9-dev libxft-dev libxinerama-dev libxcursor-dev libsndfile1-dev libsamplerate0-dev portaudio19-dev libusb-1.0-0-dev libpulse-dev libmotif-dev gpsman gpsd gpsd-clients python-gps pps-tools libgps-dev chrony graphicsmagick libgraphicsmagick1-dev festival festival-dev shapelib libshp-dev libpcre3-dev libproj-dev libdb-dev python-dev libwebp-dev libgeotiff-dev -y
+##########
+## GPSD ##
+##########
+# gpsd from repository is outdated, download new one and compile/install
+cd ~
+wget http://download.savannah.nongnu.org/releases/gpsd/gpsd-3.18.1.tar.gz
+tar -zxvsf gpsd-3.18.1
+cd gpsd-3.18.1
+scons && scons check && sudo scons udev-install
 
+# favorate apps:
+sudo apt-get install geany -y
+# from nwdigital radio install file:
+# install needed stuff:
+sudo apt-get install rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev -y
+# libraries:
+#apparently some files are missing, adding in a bunch of dependencies that might be needed from http://www.kk5jy.net/fldigi-build/:
+sudo apt-get install libfltk1.3-dev libjpeg9-dev libxft-dev libxinerama-dev libxcursor-dev libsndfile1-dev libsamplerate0-dev portaudio19-dev libusb-1.0-0-dev libpulse-dev libmotif-dev chrony graphicsmagick libgraphicsmagick1-dev festival festival-dev shapelib libshp-dev libpcre3-dev libproj-dev libdb-dev python-dev libwebp-dev libgeotiff-dev -y
+#gps specific stuff:
+sudo apt-get install gpsman gpsd-clients python-gps pps-tools libgps-dev
 #make sure in home directory
 cd ~
 #grab the scripts
 git clone https://github.com/nwdigitalradio/n7nix
 #install the base files
-cd n7nix/config
-sudo ./core_install.sh
+#cd n7nix/config
+#sudo ./core_install.sh
+#################################
+###########  NOTE  ##############
+#################################
+# nwdigital radio scripts will not be used in this, I will be phasing them out as they might have unintended affects
+# the scripts will still be downloaded for testing purposes and if other features not covered in this script
+# (ie ax.25 stacks, rms, etc) are needed. Audio level setting will come from supplied file with this repository
 
-#note: install script sets audio levels automatiaclly
 ###############
 ## FLDIGI    ##
 ###############
@@ -149,6 +171,7 @@ sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
 #########################
 ## GPS & CHRONY DAEMON ##
 #########################
+
 sudo systemctl enable gpsd && sudo systemctl restart gpsd
 sudo systemctl enable chrony && sudo systemctl restart chrony && systemctl status chrony
 
