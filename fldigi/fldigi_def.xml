@@ -8,6 +8,10 @@ Ensure user wants to leave flgidi -->
 Show tx timer on menu bar -->
 <SHOW_TX_TIMER>1</SHOW_TX_TIMER>
 
+<!-- type: int; default: 5
+TX deadman timeout in minutes -->
+<TX_TIMEOUT>5</TX_TIMEOUT>
+
 <!-- type: bool; default: true
 Save current configuration on exit -->
 <SAVECONFIG>1</SAVECONFIG>
@@ -77,17 +81,17 @@ Disable expensive processing in some decoders -->
 disable changing frequency on rsid modem change/reset -->
 <DISABLERSIDFREQCHANGE>0</DISABLERSIDFREQCHANGE>
 
-<!-- type: bool; default: false
+<!-- type: bool; default: true
 retain frequency lock on rsid modem change/reset -->
-<RETAINFREQLOCK>0</RETAINFREQLOCK>
+<RETAINFREQLOCK>1</RETAINFREQLOCK>
 
-<!-- type: double; default: -20.0
+<!-- type: double; default: 0.0
 Waterfall reference level (dB) -->
-<WFREFLEVEL>-20</WFREFLEVEL>
+<WFREFLEVEL>0</WFREFLEVEL>
 
-<!-- type: double; default: 70.0
+<!-- type: double; default: 60.0
 Waterfall amplitude span (dB) -->
-<WFAMPSPAN>70</WFAMPSPAN>
+<WFAMPSPAN>60</WFAMPSPAN>
 
 <!-- type: bool; default: false
 WF_UI - enable reverse button -->
@@ -145,21 +149,21 @@ Lowest frequency shown on waterfall (Hz) -->
 Highest frequency shown on waterfall (Hz) -->
 <HIGHFREQCUTOFF>3000</HIGHFREQCUTOFF>
 
-<!-- type: double; default: 1000
+<!-- type: double; default: 1500
 Default CW tracking point (Hz) -->
-<CWSWEETSPOT>1000</CWSWEETSPOT>
+<CWSWEETSPOT>1500</CWSWEETSPOT>
 
-<!-- type: double; default: 1000
+<!-- type: double; default: 1500
 Default RTTY tracking point (Hz) -->
-<RTTYSWEETSPOT>1000</RTTYSWEETSPOT>
+<RTTYSWEETSPOT>1500</RTTYSWEETSPOT>
 
-<!-- type: double; default: 1000
+<!-- type: double; default: 1500
 Default tracking point for all other modems (Hz) -->
-<PSKSWEETSPOT>1000</PSKSWEETSPOT>
+<PSKSWEETSPOT>1500</PSKSWEETSPOT>
 
-<!-- type: bool; default: false
+<!-- type: bool; default: true
 Always start new modems at sweet spot frequencies -->
-<STARTATSWEETSPOT>0</STARTATSWEETSPOT>
+<STARTATSWEETSPOT>1</STARTATSWEETSPOT>
 
 <!-- type: bool; default: false
 Select if waterfall should compensate for BFO offset in CW -->
@@ -206,7 +210,9 @@ Transmit all text in lowercase -->
 <TX_LOWERCASE>0</TX_LOWERCASE>
 
 <!-- type: int; default: 0
-Not configurable; must always be 0 -->
+0 - PskCore filter
+1 - Raised cosine / sinc filter
+2 - G3PLX (gmfsk) filter -->
 <PSKFILTER>0</PSKFILTER>
 
 <!-- type: bool; default: true
@@ -445,6 +451,20 @@ Lower RX limit (WPM) -->
 Upper TX limit (WPM) -->
 <CWUPPERLIMIT>50</CWUPPERLIMIT>
 
+<!-- type: int; default: 1
+rx squelch attack timing
+SLOW = 0 (100)
+MEDIUM = 1 (50)
+FAST = 2 (25) -->
+<CWRX_ATTACK>1</CWRX_ATTACK>
+
+<!-- type: int; default: 1
+rx squelch decay timing
+SLOW = 0 (1000)
+MEDIUM = 1 (500)
+FAST = 2 (250) -->
+<CWRX_DECAY>1</CWRX_DECAY>
+
 <!-- type: double; default: 3.0
 Dash to dot ratio -->
 <CWDASH2DOT>3</CWDASH2DOT>
@@ -510,6 +530,54 @@ Use open paren character; typically used in MARS ops -->
 <!-- type: std::string; default: &quot;=~&lt;&gt;%+&amp;{}&quot;
 CW prosigns BT AA AS AR SK KN INT HM VE -->
 <CWPROSIGNS>=~&lt;&gt;%+&amp;{}</CWPROSIGNS>
+
+<!-- type: bool; default: true
+Use Ä extended CW character -->
+<A_umlaut>1</A_umlaut>
+
+<!-- type: bool; default: false
+Use Æ extended CW character -->
+<A_aelig>0</A_aelig>
+
+<!-- type: bool; default: true
+Use Ä extended CW character -->
+<A_ring>1</A_ring>
+
+<!-- type: bool; default: true
+Use Ç extended CW character -->
+<C_cedilla>1</C_cedilla>
+
+<!-- type: bool; default: true
+Use È extended CW character -->
+<E_grave>1</E_grave>
+
+<!-- type: bool; default: true
+Use É extended CW character -->
+<E_acute>1</E_acute>
+
+<!-- type: bool; default: false
+Use Ó extended CW character -->
+<O_acute>0</O_acute>
+
+<!-- type: bool; default: true
+Use Ö extended CW character -->
+<O_umlaut>1</O_umlaut>
+
+<!-- type: bool; default: false
+Use Ø extended CW character -->
+<O_slash>0</O_slash>
+
+<!-- type: bool; default: true
+Use Ñ extended CW character -->
+<N_tilde>1</N_tilde>
+
+<!-- type: bool; default: true
+Use Ü extended CW character -->
+<U_umlaut>1</U_umlaut>
+
+<!-- type: bool; default: false
+Use Û extended CW character -->
+<U_circ>0</U_circ>
 
 <!-- type: double; default: 245.0
 Feld Hell working bandwidth -->
@@ -740,6 +808,10 @@ Tone duration (seconds) -->
 Always transmit lowest tone at 500 Hz -->
 <MT63AT500>0</MT63AT500>
 
+<!-- type: bool; default: false
+Always transmit centered at 1500 Hz (SHARES requirement) -->
+<MT63CENTERED>0</MT63CENTERED>
+
 <!-- type: int; default: 1
 0 - 1150 Hz, 1 - 1500 Hz, 2 - Variable -->
 <FSQFREQUENCY>1</FSQFREQUENCY>
@@ -796,6 +868,11 @@ convert operator MYCALL to lower case for directed call triggers -->
 <!-- type: int; default: 6
 Time out auto replies after XX seconds -->
 <FSQTIMEOUT>6</FSQTIMEOUT>
+
+<!-- type: int; default: 10
+FSQ notifier dialog time out XX seconds
+00 == no time out -->
+<FSQNOTIFYTIMEOUT>10</FSQNOTIFYTIMEOUT>
 
 <!-- type: bool; default: 1
 FSQ enable heard log file -->
@@ -1017,9 +1094,9 @@ Modes that are not shown in the opmodes menu -->
 Double-click on RX text enters QSO data -->
 <RXTEXTCLICKS>1</RXTEXTCLICKS>
 
-<!-- type: bool; default: false
+<!-- type: bool; default: true
 Show callsign tooltips in received text -->
-<RXTEXTTOOLTIPS>0</RXTEXTTOOLTIPS>
+<RXTEXTTOOLTIPS>1</RXTEXTTOOLTIPS>
 
 <!-- type: bool; default: false
 Auto-fill Country and Azimuth QSO fields -->
@@ -1029,13 +1106,13 @@ Auto-fill Country and Azimuth QSO fields -->
 Convert callsign field to upper case -->
 <CALLUPPERCASE>1</CALLUPPERCASE>
 
-<!-- type: bool; default: false
+<!-- type: bool; default: true
 Default outgoing RST to 599/59 -->
-<RSTDEFAULT>0</RSTDEFAULT>
+<RSTDEFAULT>1</RSTDEFAULT>
 
-<!-- type: bool; default: false
+<!-- type: bool; default: true
 Default incoming RST to 599/59 -->
-<RSTINDEFAULT>0</RSTINDEFAULT>
+<RSTINDEFAULT>1</RSTINDEFAULT>
 
 <!-- type: bool; default: true
 Enable detection and extraction of "wrapped" text -->
@@ -1063,13 +1140,69 @@ Open NBEMS folder upon receipt of an autoextract file -->
 Full pathname to the flmsg executable -->
 <FLMSG_PATHNAME></FLMSG_PATHNAME>
 
-<!-- type: std::string; default: &quot;&quot;
-Full pathname to the flnet executable -->
-<FLNET_PATHNAME></FLNET_PATHNAME>
+<!-- type: std::string; default: &quot;dinner_bell&quot;
+audio alert audio clip name / file -->
+<BWSR_REGEX_MATCH>dinner_bell</BWSR_REGEX_MATCH>
+
+<!-- type: int; default: 8
+menu selector -->
+<REGEX_ALERT_MENU>8</REGEX_ALERT_MENU>
+
+<!-- type: bool; default: false
+enable audio alert when regex match is detected in browser -->
+<ENABLE_BWSR_REGEX_MATCH>0</ENABLE_BWSR_REGEX_MATCH>
+
+<!-- type: std::string; default: &quot;dinner_bell&quot;
+audio alert audio clip name / file -->
+<BWSR_MYCALL_MATCH>dinner_bell</BWSR_MYCALL_MATCH>
+
+<!-- type: int; default: 8
+menu selector -->
+<MYCALL_ALERT_MENU>8</MYCALL_ALERT_MENU>
+
+<!-- type: bool; default: false
+enable audio alert when MYCALL is detected in browser -->
+<ENABLE_BWSR_MYCALL_MATCH>0</ENABLE_BWSR_MYCALL_MATCH>
 
 <!-- type: double; default: 2.0
 Abort message extraction after nn.n seconds of inactivity -->
 <EXTRACT_TIMEOUT>2</EXTRACT_TIMEOUT>
+
+<!-- type: std::string; default: &quot;phone&quot;
+audio alert audio clip name / file -->
+<RX_EXTRACT_MSG_RCVD>phone</RX_EXTRACT_MSG_RCVD>
+
+<!-- type: int; default: 7
+menu selector -->
+<RX_EXTRACT_ALERT_MENU>7</RX_EXTRACT_ALERT_MENU>
+
+<!-- type: bool; default: false
+enable audio alert when flmsg received -->
+<ENABLE_RX_EXTRACT_MSG_RCVD>0</ENABLE_RX_EXTRACT_MSG_RCVD>
+
+<!-- type: std::string; default: &quot;beeboo&quot;
+audio alert audio clip name / file -->
+<RX_EXTRACT_TIMED_OUT>beeboo</RX_EXTRACT_TIMED_OUT>
+
+<!-- type: int; default: 6
+menu selector -->
+<TIMED_OUT_ALERT_MENU>6</TIMED_OUT_ALERT_MENU>
+
+<!-- type: bool; default: false
+enable audio alert when flmsg reception times out -->
+<ENABLE_RX_EXTRACT_TIMED_OUT>0</ENABLE_RX_EXTRACT_TIMED_OUT>
+
+<!-- type: std::string; default: &quot;phone&quot;
+audio alert audio clip name / file -->
+<RSID_MATCH>phone</RSID_MATCH>
+
+<!-- type: int; default: 7
+menu selector -->
+<RSID_ALERT_MENU>7</RSID_ALERT_MENU>
+
+<!-- type: bool; default: false
+enable audio alert when RsID is detected -->
+<ENABLE_RSID_MATCH>0</ENABLE_RSID_MATCH>
 
 <!-- type: std::string; default: &quot;&quot;
 Full pathname to the cty.dat data file -->
@@ -1238,6 +1371,10 @@ Center the target at mode sweet spot -->
 Use actual modem carrier frequency for logging -->
 <N3FJP_MODEM_CARRIER>1</N3FJP_MODEM_CARRIER>
 
+<!-- type: bool; default: false
+Use RIGTX/RX vice CWCOMPORTKEYDOWN/CWCOMPORTKEYUP -->
+<N3FJP_RIGTX>0</N3FJP_RIGTX>
+
 <!-- type: bool; default: true
 PTT change at flrig changes Rx/Tx state
 set to false if multple instance of fldigi used with single flrig -->
@@ -1266,6 +1403,10 @@ Initial voltage on RTS is +V -->
 <!-- type: bool; default: false
 Initial voltage on DTR is +V -->
 <DTRPLUS>0</DTRPLUS>
+
+<!-- type: bool; default: false
+Serial port is SCU-17 (requires 0 stop bits -->
+<SCU_17>0</SCU_17>
 
 <!-- type: bool; default: false
 Generate PTT signal on right audio channel -->
@@ -1374,12 +1515,12 @@ Use parallel port PTT -->
 <!-- type: long; default: 0
 GPIO enable
 bits 0 - 16; bit 0 --> gpio pin N -->
-<ENABLE_GPIO>16</ENABLE_GPIO>
+<ENABLE_GPIO>8192</ENABLE_GPIO>
 
 <!-- type: long; default: 0
 GPIO State
 bits 0 - 16; bit 0 --> PTT ON state on pin N -->
-<GPIO_STATE>16</GPIO_STATE>
+<GPIO_STATE>8192</GPIO_STATE>
 
 <!-- type: int; default: 0
 GPIO pulse width setting for PiHpSDR PTT -->
@@ -1470,6 +1611,95 @@ Force the rig sideband (for the purpose of calculating frequencies).
 Values are as follows: 0: as reported by rig; 1: LSB; 2: USB. -->
 <HAMLIBSIDEBAND>0</HAMLIBSIDEBAND>
 
+<!-- type: std::string; default: &quot;NONE&quot;
+nanoIO serial device -->
+<NANOSERIALPORTNAME>NONE</NANOSERIALPORTNAME>
+
+<!-- type: int; default: 0
+0 - 45.45, 1 - 50, 2 - 75, 3 - 100 baud -->
+<NANOIOBAUD>0</NANOIOBAUD>
+
+<!-- type: int; default: 1
+MARK polarity 0 - high, 1 - low -->
+<NANOIOPOLARITY>1</NANOIOPOLARITY>
+
+<!-- type: int; default: '2'
+^ ' increment/decrement value
+range '1' to '5' -->
+<NANOIOCWINCR>50</NANOIOCWINCR>
+
+<!-- type: int; default: 18
+Paddle keyer WPM (0...100) -->
+<NANOCWKEYSPEED>18</NANOCWKEYSPEED>
+
+<!-- type: int; default: 0
+0 - IambicA, 1 - IambicB, 2 - Straight -->
+<NANOIOCWKEYER>0</NANOIOCWKEYER>
+
+<!-- type: int; default: 0
+0 = LSB | 1 = USB -->
+<XCVRFSKSIDEBAND>0</XCVRFSKSIDEBAND>
+
+<!-- type: int; default: 2125
+typical values: 1275, 1615 or 2125 for 170 Hz shift, IC7200 -->
+<XCVRFSKMARK>2125</XCVRFSKMARK>
+
+<!-- type: int; default: 2
+0 to 10, number of LTRS bytes send at beginning of xmt -->
+<TTYLTRS>2</TTYLTRS>
+
+<!-- type: std::string; default: &quot;NONE&quot;
+Nav FSK serial device -->
+<NAVFSKPORT>NONE</NAVFSKPORT>
+
+<!-- type: std::string; default: &quot;NONE&quot;
+Nav config serial device -->
+<NAVCONFIGPORT>NONE</NAVCONFIGPORT>
+
+<!-- type: int; default: 0
+0 - 45.45, 1 - 75, 2 - 100 baud -->
+<NAVFSKBAUD>0</NAVFSKBAUD>
+
+<!-- type: int; default: 0
+0 = Off | 1 = On -->
+<NAVFSKSIDETONE>0</NAVFSKSIDETONE>
+
+<!-- type: int; default: 0
+0 = Off | 1 = On -->
+<NAVFSKPTT>0</NAVFSKPTT>
+
+<!-- type: int; default: 0
+0 = Normal | 1 = Reversed -->
+<NAVFSKPOLARITY>0</NAVFSKPOLARITY>
+
+<!-- type: int; default: 1
+0 = 1 | 1 = 1.5 | 2 = 2 -->
+<NAVFSKSTOPBITS>1</NAVFSKSTOPBITS>
+
+<!-- type: int; default: 1
+0 = 15 db, 1 = None -->
+<NAVCH2ATT>1</NAVCH2ATT>
+
+<!-- type: int; default: 1
+0 = 15 db, 1 = None -->
+<NAVCH1ATT>1</NAVCH1ATT>
+
+<!-- type: int; default: 1
+0 = 20 db, 1 = None -->
+<NAVRFATT>1</NAVRFATT>
+
+<!-- type: int; default: 0
+0 = Off | 1 = On -->
+<NAVLED>0</NAVLED>
+
+<!-- type: int; default: 0
+0 = Off | 1 = On -->
+<NAVCATLED>0</NAVCATLED>
+
+<!-- type: int; default: 0
+0 = Off | 1 = On -->
+<NAVWKPTT>0</NAVWKPTT>
+
 <!-- type: std::string; default: &quot;&quot;
 Station callsign -->
 <MYCALL></MYCALL>
@@ -1528,6 +1758,10 @@ PulseAudio server string -->
 <PULSESERVER></PULSESERVER>
 
 <!-- type: bool; default: true
+Audio codec supports full duplex operation -->
+<IS_FULL_DUPLEX>1</IS_FULL_DUPLEX>
+
+<!-- type: bool; default: true
 Duplicate modem signal on left & right -->
 <SIGONRIGHTCHANNEL>0</SIGONRIGHTCHANNEL>
 
@@ -1537,7 +1771,7 @@ Reverse left-right rx audio channels -->
 
 <!-- type: bool; default: false
 Reverse left-right rx audio channels -->
-<REVERSERXAUDIO>0</REVERSERXAUDIO>
+<REVERSERXAUDIO>1</REVERSERXAUDIO>
 
 <!-- type: int; default: SAMPLE_RATE_UNSET
 For compatibility with older versions -->
@@ -1593,13 +1827,22 @@ Start of transmit delay before sending audio -->
 End of transmit delay before disabling PTT -->
 <PTTOFFDELAY>0</PTTOFFDELAY>
 
+<!-- type: double; default: 0.0
+gain factor to compensate for low level output on USB A/D in dB
+minimum -10.0, maximum + 10.0 -->
+<RX_GAIN>0</RX_GAIN>
+
 <!-- type: std::string; default: &quot;&quot;
 Logbook file name -->
 <LOGBOOKFILENAME>/home/pi/.fldigi/logs/logbook.adif</LOGBOOKFILENAME>
 
-<!-- type: bool; default: false
+<!-- type: bool; default: 0
+Display read # recs and logbook name on program start -->
+<LOGBOOKREADDISPLAY>0</LOGBOOKREADDISPLAY>
+
+<!-- type: bool; default: true
 Force RST in/out to 599 -->
-<FIXED599>0</FIXED599>
+<FIXED599>1</FIXED599>
 
 <!-- type: bool; default: true
 Insert leading zeros into transmitted serial number (contest) -->
@@ -1608,6 +1851,10 @@ Insert leading zeros into transmitted serial number (contest) -->
 <!-- type: bool; default: false
 Send CW cut numbers -->
 <CUTNBRS>0</CUTNBRS>
+
+<!-- type: bool; default: true
+clear logging fields upon transfer of CALL from Rx panel -->
+<CLEARFIELDS>1</CLEARFIELDS>
 
 <!-- type: RGB; default: {185, 211, 238}
 Background color of signal browser detect level -->
@@ -1641,9 +1888,9 @@ View Browser line select color -->
 Callsign background color when duplicate detected -->
 <dupcolor>255 110 180</dupcolor>
 
-<!-- type: bool; default: false
+<!-- type: bool; default: true
 Check for duplicates (contest) -->
-<ENABLEDUPCHECK>0</ENABLEDUPCHECK>
+<ENABLEDUPCHECK>1</ENABLEDUPCHECK>
 
 <!-- type: bool; default: true
 Predicate for ENABLEDUPCHECK (mode must match) -->
@@ -1669,9 +1916,9 @@ Predicate for ENABLEDUPCHECK (QSO inside timespan) -->
 Time for DUPTIMESPAN (minutes) -->
 <TIMESPAN>120</TIMESPAN>
 
-<!-- type: int; default: 0
+<!-- type: int; default: 1
 Contest starting number -->
-<CONTESTSTART>0</CONTESTSTART>
+<CONTESTSTART>1</CONTESTSTART>
 
 <!-- type: int; default: 4
 Number of digits in serial number -->
@@ -1734,11 +1981,11 @@ Field Day (w1hkj) server tcpip port -->
 DXCC cluster tcpip address -->
 <DXCC_HOST_URL></DXCC_HOST_URL>
 
-<!-- type: std::string; default: &quot;dxc.wb3ffv.us:7300::|nk7z-cluster.ddns.net:7373::|dx.n8noe.us:7373::|w0mw.dynip.com:23::|&quot;
+<!-- type: std::string; default: &quot;w3nr.ddns.net:7300::|dx.n8noe.us:7373::|w0mw.dynip.com:23::|&quot;
 Array of dxcluster host-port-user lines
 Fields separated by : character
 Lines separated by | character -->
-<DXCLUSTER_HOSTS>dxc.wb3ffv.us:7300::|nk7z-cluster.ddns.net:7373::|dx.n8noe.us:7373::|w0mw.dynip.com:23::|</DXCLUSTER_HOSTS>
+<DXCLUSTER_HOSTS>w3nr.ddns.net:7300::|dx.n8noe.us:7373::|w0mw.dynip.com:23::|</DXCLUSTER_HOSTS>
 
 <!-- type: RGB; default: { 0, 0, 130 }
 RX text font color (RGB) -->
@@ -2294,6 +2541,10 @@ UI TxID select color -->
 UI Tune select color -->
 <TUNECOLOR>88</TUNECOLOR>
 
+<!-- type: Fl_Color; default: FL_YELLOW
+Default color of lighted buttons -->
+<DEFAULTBTNCOLOR>95</DEFAULTBTNCOLOR>
+
 <!-- type: bool; default: false
 Try to open remote xml logbook -->
 <XML_LOGBOOK>0</XML_LOGBOOK>
@@ -2441,6 +2692,10 @@ IP port number of flrig server -->
 <!-- type: bool; default: false
 Display all rx char's using ascii3 table -->
 <SHOW_ALL_CODES>0</SHOW_ALL_CODES>
+
+<!-- type: bool; default: false
+Enable to start pskrep interface when starting fldigi -->
+<PSKREP_AUTOSTART>0</PSKREP_AUTOSTART>
 
 <!-- type: bool; default: false
 (Set by fldigi) -->
@@ -2719,5 +2974,45 @@ Flag: Change DCD pre-ample length -->
 <!-- type: bool; default: false
 Allow dockable macros -->
 <DISPLAY_48MACROS>0</DISPLAY_48MACROS>
+
+<!-- type: double; default: 0.0
+Upper axis in dB for spectrum viewer -->
+<fftviewer_maxdb>0</fftviewer_maxdb>
+
+<!-- type: double; default: 60.0
+Display range in dB for spectrum viewer -->
+<fftviewer_range>60</fftviewer_range>
+
+<!-- type: int; default: 100
+Number of scans over which the average signal level is measured. -->
+<fftviewer_scans>100</fftviewer_scans>
+
+<!-- type: double; default: 2000.0
+Scan center frequency in Hertz -->
+<fftviewer_fcenter>2000</fftviewer_fcenter>
+
+<!-- type: double; default: 4000.0
+Frequency scan range in Hertz -->
+<fftviewer_frng>4000</fftviewer_frng>
+
+<!-- type: int; default: 500
+Initial spectrum range -->
+<wf_spectrum_range>500</wf_spectrum_range>
+
+<!-- type: bool; default: true
+left click on waterfall transfers to spectrum center -->
+<wf_spectrum_center>1</wf_spectrum_center>
+
+<!-- type: bool; default: true
+scale spectrum display frequency linked to modem bandwidth -->
+<wf_spectrum_modem_scale>1</wf_spectrum_modem_scale>
+
+<!-- type: int; default: 5
+scale factor for spectrum display linked to modem bandwidth -->
+<spectrum_scale_factor>5</spectrum_scale_factor>
+
+<!-- type: bool; default: true
+use waterfall db range and offset values for spectrum scope -->
+<wf_spectrum_dbvals>1</wf_spectrum_dbvals>
 
 </FLDIGI_DEFS>
