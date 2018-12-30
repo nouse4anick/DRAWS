@@ -67,7 +67,7 @@ if [ $# -gt 0 ]; then
 			"GPS" ) GPSD_install ;;
 			"CHRONY" ) chrony_setup ;;
 			"xastir" ) Xastir_install ;;
-			-h ) usage ;;
+			"-h" ) usage ;;
 		esac
 		shift
 	done
@@ -115,7 +115,7 @@ Build_Install (){
 ## Press continue ##
 ####################
 Press_Any_key (){
-	if [$QUICK == 0] then
+	if [ $QUICK == 0 ]; then
 		read -n 1 -s -r -p "Press any key to continue"
 		echo
 	fi
