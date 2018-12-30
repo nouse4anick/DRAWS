@@ -18,72 +18,9 @@ export CXXFLAGS='-O2 -march=native -mtune=native'
 export CFLAGS='-O2 -march=native -mtune=native'
 
 
-######################
-## Current versions ##
-######################
-FLDIGICUR=4.0.18
-FLAMPCUR=2.2.03
-FLMSGCUR=4.0.7
-echo "This script will install all software nessecay for the DRAWS, it will pull down and run the NW digital radio script from the github repository"
-echo "This script will also install the following versions of fldigi/flamp/flmsg:"
-echo "fldigi: " $FLDIGICUR
-echo "flamp: " $FLAMPCUR
-echo "flmsg: " $FLMSGCUR
-read -n 1 -s -r -p "Press any key to continue, ctrl+c to quit"
-echo
 
-##################
-## update/grade ##
-##################
-# always update and upgrade:
-sudo apt-get update
-sudo apt-get upgrade -y
-# favorate apps:
-sudo apt-get install geany -y
-# Needed items from the nwdigital scripts:
-sudo apt-get install rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev -y
 
-############
-## params ##
-############
-
-# params are:
-# - fldigi
-# - flmsg
-# - flamp
-# - gps
-# - xastir (both xastir and direwolf
-# - chrony
-# 
-# if no params install everything
-
-if [ $# -gt 0 ]; then
-	#loop through commands and get them
-	while [ "$1" != "" ]; do
-		case $1 in
-			"FLDIGI" ) FLDIGI_source ;;
-			"FLAMP" ) FLAMP_source ;;
-			"FLMSG" ) FLMSG_source ;;
-			"GPS" ) GPSD_install ;;
-			"CHRONY" ) chrony_setup ;;
-			"xastir" ) Xastir_install ;;
-			"-h" ) usage ;;
-		esac
-		shift
-	done
-else
-	# install everything:
-	Enable_Sources
-	Check_overlay
-	FLDIGI_source
-	FLAMP_source
-	FLMSG_source
-	GPSD_install
-	chrony_setup
-	Xastir_install
-fi
-
-usage (){
+Usage (){
 	echo "usage: install.sh (args)
 	Args can be:
 	FLDIGI : installs fldigi
@@ -284,7 +221,70 @@ Xastir_install () {
 }
 
 
+######################
+## Current versions ##
+######################
+FLDIGICUR=4.0.18
+FLAMPCUR=2.2.03
+FLMSGCUR=4.0.7
+echo "This script will install all software nessecay for the DRAWS, it will pull down and run the NW digital radio script from the github repository"
+echo "This script will also install the following versions of fldigi/flamp/flmsg:"
+echo "fldigi: " $FLDIGICUR
+echo "flamp: " $FLAMPCUR
+echo "flmsg: " $FLMSGCUR
+read -n 1 -s -r -p "Press any key to continue, ctrl+c to quit"
+echo
 
+##################
+## update/grade ##
+##################
+# always update and upgrade:
+sudo apt-get update
+sudo apt-get upgrade -y
+# favorate apps:
+sudo apt-get install geany -y
+# Needed items from the nwdigital scripts:
+sudo apt-get install rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev -y
+
+############
+## params ##
+############
+
+# params are:
+# - fldigi
+# - flmsg
+# - flamp
+# - gps
+# - xastir (both xastir and direwolf
+# - chrony
+# 
+# if no params install everything
+
+if [ $# -gt 0 ]; then
+	#loop through commands and get them
+	while [ "$1" != "" ]; do
+		case $1 in
+			"FLDIGI" ) FLDIGI_source ;;
+			"FLAMP" ) FLAMP_source ;;
+			"FLMSG" ) FLMSG_source ;;
+			"GPS" ) GPSD_install ;;
+			"CHRONY" ) chrony_setup ;;
+			"xastir" ) Xastir_install ;;
+			"-h" ) Usage ;;
+		esac
+		shift
+	done
+else
+	# install everything:
+	Enable_Sources
+	Check_overlay
+	FLDIGI_source
+	FLAMP_source
+	FLMSG_source
+	GPSD_install
+	chrony_setup
+	Xastir_install
+fi
 
 # libraries:
 #apparently some files are missing, adding in a bunch of dependencies that might be needed from http://www.kk5jy.net/fldigi-build/:
