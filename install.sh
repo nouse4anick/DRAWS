@@ -78,7 +78,7 @@ deb-src http://archive.raspbian.org/raspbian/ stretch main contrib non-free rpi
 	# favorate apps:
 	sudo apt-get install geany -y
 	# Needed items from the nwdigital scripts:
-	sudo apt-get install rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev -y
+	sudo apt-get install rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev scons -y
 	Press_Any_key
 }
 ############################
@@ -197,13 +197,13 @@ Xastir_install () {
 	sudo apt-get remove imagemagick -y
 	#build list taken from https://xastir.org/index.php/HowTo:Raspbian_Jessie
 	sudo apt-get install xorg-dev graphicsmagick gv libmotif-dev libcurl4-openssl-dev -y
-	sudo apt-get install libpcre3-dev libproj-dev libdb5.3-dev python-dev libax25-dev libwebp-dev -y
-	sudo apt-get install shapelib libshp-dev festival festival-dev libgeotiff-dev libgraphicsmagick1-dev -y
-	sudo apt-get install xfonts-100dpi xfonts-75dpi
+	sudo apt-get install libpcre3-dev libproj-dev libdb5.3-dev python-dev libax25-dev libwebp-dev libproj-dev -y
+	sudo apt-get install shapelib libshp-dev festival festival-dev libgeotiff-dev libgraphicsmagick1-dev gpsman -y
+	sudo apt-get install xfonts-100dpi xfonts-75dpi -y
 	xset +fp /usr/share/fonts/X11/100dpi,/usr/share/fonts/X11/75dpi
 	cd ~
 	git clone https://github.com/Xastir/Xastir.git
-	cd xastir
+	cd Xastir
 	./bootstrap.sh
 	./configure CPPFLAGS="-I/usr/include/geotiff"
 	#ask if it configured correctly
@@ -216,8 +216,8 @@ Xastir_install () {
 		#copy all config files
 		cd ~
 		cp ./DRAWS/direwolf.conf ./direwolf.conf
-		cp ./DRAWS/xastir/* ./.xastir/config
-
+		cp ./DRAWS/xastir/xastir.cnf ./.xastir/config/xastir.cnf
+		sudo cp -r ./DRAWS/xastir/maps/ /usr/share/xastir/
 	fi
 	
 }
