@@ -11,7 +11,7 @@
 
 
 # Testing Variable: 1 for initial trial and tests/config file updates (does NOT copy config files)
-TESTING=1
+TESTING=0
 QUICK=0
 # set flags first taken from http://www.kk5jy.net/fldigi-build/:
 export CXXFLAGS='-O2 -march=native -mtune=native'
@@ -128,6 +128,10 @@ FLDIGI_source () {
 	Press_Any_key
 	cd ~
 	wget https://sourceforge.net/projects/fldigi/files/fldigi/fldigi-$FLDIGICUR.tar.gz
+	if [ $? -ne 0 ] ; then
+		echo "download for FLDIGI failed! exiting...."
+		exit 1
+	fi
 	tar -zxvsf fldigi-$FLDIGICUR.tar.gz
 	cd fldigi-$FLDIGICUR
 	Build_Install
@@ -145,6 +149,10 @@ FLDIGI_source () {
 FLAMP_source () {
 	cd ~
 	wget -N https://sourceforge.net/projects/fldigi/files/flamp/flamp-$FLAMPCUR.tar.gz
+	if [ $? -ne 0 ] ; then
+		echo "download for FLAMP failed! exiting...."
+		exit 1
+	fi
 	tar -zxvsf flamp-$FLAMPCUR.tar.gz
 	cd flamp-$FLAMPCUR
 	Build_Install
@@ -156,6 +164,10 @@ FLAMP_source () {
 FLMSG_source () {
 	cd ~
 	wget https://sourceforge.net/projects/fldigi/files/flmsg/flmsg-$FLMSGCUR.tar.gz
+	if [ $? -ne 0 ] ; then
+		echo "download for FLMSG failed! exiting...."
+		exit 1
+	fi
 	tar -zxvsf flmsg-$FLMSGCUR.tar.gz
 	cd flmsg-$FLMSGCUR
 	Build_Install
@@ -170,6 +182,10 @@ GPSD_install (){
 	# gpsd from repository is outdated, download new one and compile/install
 	cd ~
 	wget http://download.savannah.nongnu.org/releases/gpsd/gpsd-3.18.1.tar.gz
+	if [ $? -ne 0 ] ; then
+		echo "download for GPSD failed! exiting...."
+		exit 1
+	fi
 	tar -zxvsf gpsd-3.18.1.tar.gz
 	cd gpsd-3.18.1
 	scons && scons check && sudo scons udev-install
@@ -201,6 +217,7 @@ Xastir_install () {
 	sudo apt-get install shapelib libshp-dev festival festival-dev libgeotiff-dev libgraphicsmagick1-dev gpsman -y
 	sudo apt-get install xfonts-100dpi xfonts-75dpi -y
 	xset +fp /usr/share/fonts/X11/100dpi,/usr/share/fonts/X11/75dpi
+	Press_Any_key
 	cd ~
 	git clone https://github.com/Xastir/Xastir.git
 	cd Xastir
