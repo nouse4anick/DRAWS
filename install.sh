@@ -224,13 +224,18 @@ Xastir_install () {
 	echo
 	make
 	sudo make install
+	# clean up the install because xastir programmers are lazy:
+	sudo mkdir /usr/share/xastir
+	sudo cp -r ./symbols/ /usr/share/xastir
+	sudo cp -r ../DRAWS/xastir/maps/ /usr/share/xastir/
+	
 	#copy all config files
 	cd ~
 	cp ./DRAWS/direwolf.conf ./direwolf.conf
 	cp ./DRAWS/xastir/xastir.cnf ./.xastir/config/xastir.cnf
 	cp ./DRAWS/desktop/xastir.desktop ./Desktop/xastir.desktop
 	cp ./DRAWS/desktop/direwolf.desktop ./Desktop/direwolf.desktop
-	sudo cp -r ./DRAWS/xastir/maps/ /usr/share/xastir/
+	
 	
 }
 #############
