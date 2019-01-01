@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
-Exec=/home/pi/FDLog/fdlog.py
+Exec=/home/pi/FDLog_Enhanced/FDLog_SCICSG.py
 Name=FDLog
 Comment=FDLog
 Icon=accessories-text-editor
-Path=/home/pi/FDLog
+Path=/home/pi/FDLog_Enhanced
 Terminal=true
 Categories=HamRadio
 Keywords=Ham Radio

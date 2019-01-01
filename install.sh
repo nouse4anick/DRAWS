@@ -249,7 +249,16 @@ js8call_source () {
 	sudo dpkg -i js8call_0.11.0-devel_armhf.deb
 	
 }
-
+####################
+## fdlog_enhanced ##
+####################
+fdlog_install (){
+	#installs fdlog from source:
+	cd ~
+	git clone https://github.com/scotthibbs/FDLog_Enhanced
+	cp ./DRAWS/desktop/FDLog.desktop ./Desktop/FDLog.desktop
+	
+}
 ######################
 ## Current versions ##
 ######################
