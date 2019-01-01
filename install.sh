@@ -194,7 +194,7 @@ chrony_setup (){
 ###############
 Xastir_install () {
 	#note: use graphicsmagick, breaks with imagemagic
-	sudo apt-get remove imagemagick -y
+	sudo apt-get remove imagemagick xastir -y
 	#build list taken from https://xastir.org/index.php/HowTo:Raspbian_Jessie
 	sudo apt-get install xorg-dev graphicsmagick gv libmotif-dev libcurl4-openssl-dev -y
 	sudo apt-get install libpcre3-dev libproj-dev libdb5.3-dev python-dev libax25-dev libwebp-dev libproj-dev -y
