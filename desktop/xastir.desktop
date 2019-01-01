@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Exec=xastir
-Name=fldigi
-Comment=fldigi
+Name=Xastir
+Comment=Xastir
 Icon=/usr/share/xastir/symbols/icon.png
 Path=/home/pi
 #Terminal=true

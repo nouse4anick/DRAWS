@@ -205,6 +205,8 @@ chrony_setup (){
 Xastir_install () {
 	#note: use graphicsmagick, breaks with imagemagic
 	sudo apt-get remove imagemagick xastir -y
+	# install direwolf:
+	sudo apt-get install direwolf -y
 	#build list taken from https://xastir.org/index.php/HowTo:Raspbian_Jessie
 	sudo apt-get install xorg-dev graphicsmagick gv libmotif-dev libcurl4-openssl-dev -y
 	sudo apt-get install libpcre3-dev libproj-dev libdb5.3-dev python-dev libax25-dev libwebp-dev libproj-dev -y
@@ -213,8 +215,8 @@ Xastir_install () {
 	xset +fp /usr/share/fonts/X11/100dpi,/usr/share/fonts/X11/75dpi
 	Press_Any_key
 	cd ~
-	git clone https://github.com/Xastir/Xastir.git
-	cd Xastir
+	git clone https://github.com/xastir/xastir.git
+	cd xastir
 	./bootstrap.sh
 	./configure CPPFLAGS="-I/usr/include/geotiff"
 	#ask if it configured correctly
@@ -226,6 +228,8 @@ Xastir_install () {
 	cd ~
 	cp ./DRAWS/direwolf.conf ./direwolf.conf
 	cp ./DRAWS/xastir/xastir.cnf ./.xastir/config/xastir.cnf
+	cp ./DRAWS/desktop/xastir.desktop ./Desktop/xastir.desktop
+	cp ./DRAWS/desktop/direwolf.desktop ./Desktop/direwolf.desktop
 	sudo cp -r ./DRAWS/xastir/maps/ /usr/share/xastir/
 	
 }
