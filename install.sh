@@ -221,7 +221,17 @@ Xastir_install () {
 	fi
 	
 }
-
+#############
+## js8call ##
+#############
+js8call_source () {
+	#NOTE: no gpio support for fldigi. ignoring implementing for now, need to address this next month when 0.11.0 stops working.
+	cd ~
+	sudo apt-get install libqgsttools-p1 libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediaquick-p5 libqt5multimediawidgets5 libqt5qml5 libqt5quick5 libqt5serialport5 -y
+	wget https://s3.amazonaws.com/js8call/0.11.0/js8call_0.11.0-devel_armhf.deb
+	sudo dpkg -i js8call_0.11.0-devel_armhf.deb
+	
+}
 
 ######################
 ## Current versions ##
