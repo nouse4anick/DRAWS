@@ -23,7 +23,8 @@ Usage (){
 	FLMSG : installs flmsg
 	GPS : installs gps
 	CHRONY : installs/sets up chrony
-	xastir : installs xastir
+	xastir : installs xastir and direwolf
+	fdlog : installs FDLog Enhanced
 	-h shows this help and exits"
 	exit
 }
@@ -300,6 +301,7 @@ if [ $# -gt 0 ]; then
 			"GPS" ) GPSD_install ;;
 			"CHRONY" ) chrony_setup ;;
 			"xastir" ) Xastir_install ;;
+			"fdlog" ) fdlog_install ;;
 			"-h" ) Usage ;;
 		esac
 		shift
@@ -315,6 +317,7 @@ else
 	GPSD_install
 	chrony_setup
 	Xastir_install
+	fdlog_install
 fi
 
 # libraries:
