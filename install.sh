@@ -8,10 +8,7 @@
 # - will have command line arguments (basic reinstall type stuff)
 # - 
 
-
-
-# Testing Variable: 1 for initial trial and tests/config file updates (does NOT copy config files)
-TESTING=0
+#disable the pause
 QUICK=0
 # set flags first taken from http://www.kk5jy.net/fldigi-build/:
 export CXXFLAGS='-O2 -march=native -mtune=native'
@@ -137,11 +134,8 @@ FLDIGI_source () {
 	Build_Install
 	cp data/fldigi.desktop ~/Desktop/
 	cp data/flarq.desktop ~/Desktop/
-	if [ $TESTING == 0 ]
-	then
-		cd ~
-		cp ./DRAWS/fldigi/fldigi_def.xml ./.fldigi/fldigi_def.xml
-	fi
+	cd ~
+	cp ./DRAWS/fldigi/fldigi_def.xml ./.fldigi/fldigi_def.xml
 }
 ###############
 ## FLAMP     ##
@@ -228,14 +222,11 @@ Xastir_install () {
 	echo
 	make
 	sudo make install
-	if [ $TESTING == 0 ]
-	then
-		#copy all config files
-		cd ~
-		cp ./DRAWS/direwolf.conf ./direwolf.conf
-		cp ./DRAWS/xastir/xastir.cnf ./.xastir/config/xastir.cnf
-		sudo cp -r ./DRAWS/xastir/maps/ /usr/share/xastir/
-	fi
+	#copy all config files
+	cd ~
+	cp ./DRAWS/direwolf.conf ./direwolf.conf
+	cp ./DRAWS/xastir/xastir.cnf ./.xastir/config/xastir.cnf
+	sudo cp -r ./DRAWS/xastir/maps/ /usr/share/xastir/
 	
 }
 #############
