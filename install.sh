@@ -225,11 +225,11 @@ Xastir_install () {
 	echo
 	make
 	sudo make install
-	# clean up the install because xastir programmers are lazy:
-	sudo mkdir /usr/share/xastir
-	sudo cp -r ./symbols/ /usr/share/xastir
-	sudo cp -r ../DRAWS/xastir/maps/ /usr/share/xastir/
-	
+	# so xastir programmers are not lazy, but the binary install is, check to see if xastir.cnf exists, if it does move it to a backup and delete it.
+	if [[ -e "~/.xastir/config/xastir.cnf" ]]; then
+		echo "previous xastir config file detected, backing up file"
+		mv ~/.xastir/config/xastir.cnf ~/.xastir/config/xastir.cnf.bkup
+	fi
 	#copy all config files
 	cd ~
 	cp ./DRAWS/direwolf.conf ./direwolf.conf

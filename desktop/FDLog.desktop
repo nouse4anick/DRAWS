@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=/home/pi/FDLog_Enhanced/FDLog_SCICSG.py
+Exec=python /home/pi/FDLog_Enhanced/FDLog_SCICSG.py
 Name=FDLog
 Comment=FDLog
 Icon=accessories-text-editor
