@@ -1,12 +1,14 @@
 #!/bin/bash
-#version: 1.1.3
+#version: 1.1.4
 # updated fresh install script, now installs everything needed for a portable digital station
 # Note: this is for the raspberry pi with a DRAWS Hat from nwdigitalradio
 
 # New update!
 # - functionised everything
 # - will have command line arguments (basic reinstall type stuff)
-# - 
+# - added checks for 'fresh installs'... it checks to see if draws is initialized
+# - added flwrap, possibly will add other  fl options
+# - added checks for existing software
 
 #disable the pause
 QUICK=0
@@ -21,10 +23,13 @@ Usage (){
 	FLDIGI : installs fldigi
 	FLAMP : installs flamp
 	FLMSG : installs flmsg
+	FLWRAP : installs flwrap
 	GPS : installs gps
 	CHRONY : installs/sets up chrony
 	xastir : installs xastir and direwolf
 	fdlog : installs FDLog Enhanced
+	check : does system check using n7nix's scripts
+	flsuite : installs all fl programs (ie fldigi/amp/msg/wrap/etc)
 	-h shows this help and exits"
 	exit
 }
@@ -136,6 +141,11 @@ FLDIGI_source () {
 	cp data/fldigi.desktop ~/Desktop/
 	cp data/flarq.desktop ~/Desktop/
 	cd ~
+	# current settings for fldigi:
+	# set soundcard capture
+	# right channel NO check box
+	# gpio: bcm 12 (gpio 26/pin 32)
+	
 	cp ./DRAWS/fldigi/fldigi_def.xml ./.fldigi/fldigi_def.xml
 }
 ###############
@@ -168,11 +178,37 @@ FLMSG_source () {
 	Build_Install
 	cp data/flmsg.desktop ~/Desktop/
 }
+###############
+## FLWRAP    ##
+###############
+FLWRAP_source () {
+	cd ~
+	wget https://sourceforge.net/projects/fldigi/files/flwrap/flwrap-$FLWRAP.tar.gz
+	if [ $? -ne 0 ] ; then
+		echo "download for FLWRAP failed! exiting...."
+		exit 1
+	fi
+	tar -zxvsf flwrap-$FLWRAP.tar.gz
+	cd flwrap-$FLWRAP
+	Build_Install
+	cp data/flwrap.desktop ~/Desktop/
+}
 ##########
 ## GPSD ##
 ##########
 GPSD_install (){
-
+	#gpsd version check: gpsd -V
+	# check version and remove if nessecary and install new version
+	# output is: gpsd: 3.18.1 (revision 3.18.1)
+	curver="$(gpsd -V)"
+	if [ $curver == "gpsd: 3.18.1 (revision 3.18.1)" ]; then
+		echo "current version of gpsd installed"
+		return
+	else
+		echo "Another version is installed: $curver"
+		Press_Any_key
+	fi
+	# its not up to date, 
 	sudo apt-get remove gpsd -y
 	# gpsd from repository is outdated, download new one and compile/install
 	cd ~
@@ -194,6 +230,13 @@ GPSD_install (){
 ## CHRONY DAEMON ##
 ###################
 chrony_setup (){
+	# chrony installed from repository
+	sudo dpkg -l | grep "chrony" > /dev/null
+	if [ $? -eq 0 ]; then
+		echo "chrony installed, assuming already set up"
+		Press_Any_key
+		return
+	fi
 	sudo apt-get install chrony -y
 	sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
 	sudo systemctl enable chrony && sudo systemctl restart chrony && systemctl status chrony
@@ -205,9 +248,25 @@ chrony_setup (){
 ###############
 Xastir_install () {
 	#note: use graphicsmagick, breaks with imagemagic
-	sudo apt-get remove imagemagick xastir -y
+	sudo apt-get remove imagemagick -y
+	#check for xastir
+	sudo dpkg -l | grep 'xastir' > /dev/null
+	xastircheck=$?
+	if [ $xastircheck -eq 0 ]; then
+		sudo apt-get remove xastir -y
+	fi
 	# install direwolf:
-	sudo apt-get install direwolf -y
+	#check to see if installed via repository:
+	sudo dpkg -l | grep 'direwolf' > /dev/null
+	dpkgcheck=$?
+	whereis direwolf > /dev/null
+	whereischeck=$?
+	if [ $dpkgcheck -eq 1 && $whereischeck -eq 1 ]; then
+		echo "direwolf is not installed. Installing from repository"
+		sudo apt-get install direwolf -y
+	else
+		echo "direwolf is installed, version not determined, continuing with xastir install"
+	fi
 	#build list taken from https://xastir.org/index.php/HowTo:Raspbian_Jessie
 	sudo apt-get install xorg-dev graphicsmagick gv libmotif-dev libcurl4-openssl-dev -y
 	sudo apt-get install libpcre3-dev libproj-dev libdb5.3-dev python-dev libax25-dev libwebp-dev libproj-dev -y
@@ -260,18 +319,68 @@ fdlog_install (){
 	cp ./DRAWS/desktop/FDLog.desktop ./Desktop/FDLog.desktop
 	
 }
+##################
+## System Check ##
+##################
+System_check () {
+	#run through checks for n7nix
+	cd ~/n7nix
+	if [ $? -ne 0 ] ; then
+		echo "Errpr: nwdigial scrips not detected... exiting"
+		exit 1
+	fi
+	echo "Running n7nix verify..."
+	cd bin
+	echo "backing up alsa settings"
+	./alsa-show.sh > ~/current-alsa-settings.txt
+	sudo ./setalsa-default.sh
+	./piver.sh
+	Press_Any_key
+	./udrcver.sh
+	Press_Any_key
+	cd ~/bin
+	./sndcrd.sh
+	Press_Any_key
+	sensors
+	Press_Any_key
+	systemctl status chronyd
+	Press_Any_key
+	echo "testing gps using gpsmon, use ctrl+c to quit the monitor"
+	Press_Any_key
+	gpsmon
+	echo "checking chrony sources..."
+	chronyc sources
+	Press_Any_key
+	echo "testing AX25 protocols, test should come back as NOT ENABLED for all services for this install"
+	ax25-status
+	echo "Testing finished."
+	exit 0
+}
+##############
+## FL Suite ##
+##############
+FLSUITE (){
+	#installs fl suite of programs:
+	FLDIGI_source
+	FLAMP_source
+	FLMSG_source
+	FLWRAP_source
+}
+
 ######################
 ## Current versions ##
 ######################
 FLDIGICUR=4.0.18
 FLAMPCUR=2.2.03
 FLMSGCUR=4.0.7
+FLWRAP=1.3.5
 echo "To view optional arguments use './install.sh -h'"
 echo "This script will install all software nessecay for the DRAWS, it will pull down and run the NW digital radio script from the github repository"
 echo "This script will also install the following versions of fldigi/flamp/flmsg:"
 echo "fldigi: " $FLDIGICUR
 echo "flamp: " $FLAMPCUR
 echo "flmsg: " $FLMSGCUR
+echo "flwrap: " $FLWRAP
 read -n 1 -s -r -p "Press any key to continue, ctrl+c to quit"
 echo
 
@@ -298,10 +407,13 @@ if [ $# -gt 0 ]; then
 			"FLDIGI" ) FLDIGI_source ;;
 			"FLAMP" ) FLAMP_source ;;
 			"FLMSG" ) FLMSG_source ;;
+			"FLWRAP" ) FLWRAP_source ;;
 			"GPS" ) GPSD_install ;;
 			"CHRONY" ) chrony_setup ;;
 			"xastir" ) Xastir_install ;;
 			"fdlog" ) fdlog_install ;;
+			"check" ) System_check ;;
+			"flsuite" ) FLSUITE ;;
 			"-h" ) Usage ;;
 		esac
 		shift
@@ -311,9 +423,7 @@ else
 	# install everything:
 	Enable_Sources
 	Check_overlay
-	FLDIGI_source
-	FLAMP_source
-	FLMSG_source
+	FLSUITE
 	GPSD_install
 	chrony_setup
 	Xastir_install
