@@ -30,6 +30,7 @@ Usage (){
 	fdlog : installs FDLog Enhanced
 	check : does system check using n7nix's scripts
 	flsuite : installs all fl programs (ie fldigi/amp/msg/wrap/etc)
+	beta : installs anything left out of the new beta image from nw digital radio
 	-h shows this help and exits"
 	exit
 }
@@ -146,7 +147,8 @@ FLDIGI_source () {
 	# right channel NO check box
 	# gpio: bcm 12 (gpio 26/pin 32)
 	
-	cp ./DRAWS/fldigi/fldigi_def.xml ./.fldigi/fldigi_def.xml
+	cp ~/DRAWS/fldigi/fldigi_def.xml ~/.fldigi/fldigi_def.xml
+	cp ~/DRAWS/fldigi/macros.mdf ~/.fldigi/macros/macros.mdf
 }
 ###############
 ## FLAMP     ##
@@ -221,7 +223,7 @@ GPSD_install (){
 	cd gpsd-3.18.1
 	scons && scons check && sudo scons udev-install
 	cd ~
-	sudo cp ./DRAWS/gpsd /etc/default/gpsd
+	sudo cp ~/DRAWS/gpsd /etc/default/gpsd
 	sudo systemctl unmask gpsd.service && sudo systemctl unmask gpsd.socket && sudo systemctl enable gpsd && sudo systemctl restart gpsd
 	echo "GPS daemon ready, run 'gpsmon' to check gps, if it doesn't work reboot"
 	Press_Any_key
@@ -238,7 +240,7 @@ chrony_setup (){
 		return
 	fi
 	sudo apt-get install chrony -y
-	sudo cp ./DRAWS/chrony.conf /etc/chrony/chrony.conf
+	sudo cp ~/DRAWS/chrony.conf /etc/chrony/chrony.conf
 	sudo systemctl enable chrony && sudo systemctl restart chrony && systemctl status chrony
 	echo "Chrony is ready, run 'chronyc sources' to verify"
 	Press_Any_key
@@ -291,10 +293,10 @@ Xastir_install () {
 	fi
 	#copy all config files
 	cd ~
-	cp ./DRAWS/direwolf.conf ./direwolf.conf
-	cp ./DRAWS/xastir/xastir.cnf ./.xastir/config/xastir.cnf
-	cp ./DRAWS/desktop/xastir.desktop ./Desktop/xastir.desktop
-	cp ./DRAWS/desktop/direwolf.desktop ./Desktop/direwolf.desktop
+	cp ~/DRAWS/direwolf.conf ~/direwolf.conf
+	cp ~/DRAWS/xastir/xastir.cnf ~/.xastir/config/xastir.cnf
+	cp ~/DRAWS/desktop/xastir.desktop ~/Desktop/xastir.desktop
+	cp ~/DRAWS/desktop/direwolf.desktop ~/Desktop/direwolf.desktop
 	
 	
 }
@@ -331,15 +333,15 @@ System_check () {
 	fi
 	echo "Running n7nix verify..."
 	cd bin
-	echo "backing up alsa settings"
+	echo "backing up alsa settings and setting to default"
 	./alsa-show.sh > ~/current-alsa-settings.txt
 	sudo ./setalsa-default.sh
+	echo "continuing with check..."
 	./piver.sh
 	Press_Any_key
 	./udrcver.sh
 	Press_Any_key
-	cd ~/bin
-	./sndcrd.sh
+	~/bin/sndcard.sh
 	Press_Any_key
 	sensors
 	Press_Any_key
@@ -365,6 +367,25 @@ FLSUITE (){
 	FLAMP_source
 	FLMSG_source
 	FLWRAP_source
+}
+##################
+## Current beta ##
+##################
+Beta (){
+	#installs does the cleanup/installs for beta 7 from nwdigital radio:
+	FLMSG_source
+	FLWRAP_source
+	Xastir_install
+	fdlog_install
+	# copy files to the desktop and for xastir/fldigi:
+	cp /usr/local/src/fldigi-$FLDIGICUR/data/fldigi.desktop ~/Desktop/
+	cp /usr/local/src/fldigi-$FLDIGICUR/data/flarq.desktop ~/Desktop/
+	# current settings for fldigi:
+	# set soundcard capture
+	# right channel NO check box
+	# gpio: bcm 12 (gpio 26/pin 32)
+	cp ~/DRAWS/fldigi/fldigi_def.xml ~/.fldigi/fldigi_def.xml
+	cp ~/DRAWS/fldigi/macros.mdf ~/.fldigi/macros/macros.mdf
 }
 
 ######################
@@ -414,6 +435,7 @@ if [ $# -gt 0 ]; then
 			"fdlog" ) fdlog_install ;;
 			"check" ) System_check ;;
 			"flsuite" ) FLSUITE ;;
+			"beta" ) beta ;;
 			"-h" ) Usage ;;
 		esac
 		shift

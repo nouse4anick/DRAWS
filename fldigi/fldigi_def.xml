@@ -1767,11 +1767,11 @@ Duplicate modem signal on left & right -->
 
 <!-- type: bool; default: false
 Reverse left-right rx audio channels -->
-<REVERSEAUDIO>1</REVERSEAUDIO>
+<REVERSEAUDIO>0</REVERSEAUDIO>
 
 <!-- type: bool; default: false
 Reverse left-right rx audio channels -->
-<REVERSERXAUDIO>1</REVERSERXAUDIO>
+<REVERSERXAUDIO>0</REVERSERXAUDIO>
 
 <!-- type: int; default: SAMPLE_RATE_UNSET
 For compatibility with older versions -->

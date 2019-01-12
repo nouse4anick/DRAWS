@@ -1,0 +1,309 @@
+//fldigi macro definition file extended
+// This file defines the macro structure(s) for the digital modem program, fldigi
+// It also serves as a basis for any macros that are written by the user
+//
+// The top line of this file should always be the first line in every macro 
+// definition file (.mdf) for the fldigi program to recognize it as such.
+//
+
+//
+// Macro # 1
+/$ 0 CQ @>|
+<TX>\n
+CQ CQ CQ de <MYCALL> <MYCALL> <MYCALL>\n
+CQ CQ CQ de <MYCALL> <MYCALL> <MYCALL> pse k\n
+<RX>
+
+//
+// Macro # 2
+/$ 1 ANS @>|
+<TX><CALL> <CALL> de <MYCALL> <MYCALL> <MYCALL> kn\n
+<RX>
+
+//
+// Macro # 3
+/$ 2 QSO @>>
+<TX>\n
+<CALL> de <MYCALL> 
+
+//
+// Macro # 4
+/$ 3 btu @||
+ btu <CALL> de <MYCALL> k\n
+<RX>
+
+//
+// Macro # 5
+/$ 4 SK @||
+\n
+tnx fer QSO, 73.\n
+<ZDT> <CALL> de <MYCALL> sk\n
+<RX>
+
+//
+// Macro # 6
+/$ 5 Me/Qth
+\n
+my name <MYNAME>, QTH <MYQTH>, LOC <MYLOC>\n
+
+
+//
+// Macro # 7
+/$ 6 Brag
+Rig: \n
+Pwr: \n
+Ant: \n
+hdwe: \n
+\n
+
+
+//
+// Macro # 8
+/$ 7 73 @>|
+73 de <MYCALL> SK\n
+<RX>
+
+//
+// Macro # 9
+/$ 8 T/R
+<TX/RX>
+
+//
+// Macro # 10
+/$ 9 Tx @>>
+<TX>
+
+//
+// Macro # 11
+/$ 10 Rx @||
+<RX>
+
+//
+// Macro # 12
+/$ 11 TX @>|
+<TX>\n
+de <MYCALL> k\n
+<RX>
+
+//
+// Macro # 13
+/$ 12 Clear Freq?
+allcall de <MYCALL>: Is this frequency in use/K?
+
+//
+// Macro # 14
+/$ 13 NET-Start
+allcall de <MYCALL> NCS for the Sudden Valley ARC Digital Net. EMERGENCY or PRIORITY Traffic call now/K?
+
+//
+// Macro # 15
+/$ 14 Roll Call
+allcall de <MYCALL>: The SVARC Digital NET accepting traffic in call sign suffix order. Members call now - visitors wait/KN:
+
+//
+// Macro # 16
+/$ 15 Late-Miss
+allcall de <MYCALL>, LATE or MISSED? Call now-visitors wait/K:
+
+//
+// Macro # 17
+/$ 16 Visitors
+allcall de <MYCALL>:  VISITORS? Call now/K:
+
+//
+// Macro # 18
+/$ 17 ACK
+allcall ACKNOWLEDGE
+
+//
+// Macro # 19
+/$ 18 NET-End
+allcall The SVARC Digital Net will run again next Sunday at 1930  hrs PT. de <MYCALL> closing the NET at <LT[:fmt]> SK/CL
+
+
+//
+// Macro # 20
+/$ 19 
+
+
+//
+// Macro # 21
+/$ 20 
+
+
+//
+// Macro # 22
+/$ 21 
+
+
+//
+// Macro # 23
+/$ 22 FSQ
+<MODEM:FSQ>
+
+
+//
+// Macro # 24
+/$ 23 Check In
+allcall de <MYNAME> / <MYCALL> <ANTENNA>  monitoring
+
+
+//
+// Macro # 25
+/$ 24 
+
+
+//
+// Macro # 26
+/$ 25 
+
+
+//
+// Macro # 27
+/$ 26 
+
+
+//
+// Macro # 28
+/$ 27 
+
+
+//
+// Macro # 29
+/$ 28 
+
+
+//
+// Macro # 30
+/$ 29 
+
+
+//
+// Macro # 31
+/$ 30 
+
+
+//
+// Macro # 32
+/$ 31 
+
+//
+// Macro # 33
+/$ 32 
+
+//
+// Macro # 34
+/$ 33 
+
+
+//
+// Macro # 35
+/$ 34 
+
+//
+// Macro # 36
+/$ 35 
+
+
+//
+// Macro # 37
+/$ 36 CQ FD @>|
+\n
+<TX>\n
+CQ FD CQ FD CQ FD de <MYCALL> <MYCALL> \n
+<RX>
+
+//
+// Macro # 38
+/$ 37 fd respond
+\n
+<TX>\n
+<CALL> <CALL> de <MYCALL> <MYCALL> \n
+pse copy <MYCLASS> <MYSECTION> <MYCLASS> <MYSECTION> <MYCLASS> <MYSECTION>\n
+QSL?\n
+<CALL> de <MYCALL> k\n
+<RX>
+
+//
+// Macro # 39
+/$ 38 FD copy check
+\n
+<TX>\n
+<CALL> de <MYCALL>\n
+I cpy <FDCLASS> <FDCLASS> <FDSECT> <FDSECT> QSL?\n
+<CALL> de <MYCALL> k\n
+<RX>
+
+//
+// Macro # 40
+/$ 39 FD final
+\n
+<TX>\n
+<CALL> de <MYCALL> \n
+QSL in log\n
+Tnx for QSO and GL <ZDT>\n
+<CALL> 73 de <MYCALL> sk\n
+<RX>
+
+//
+// Macro # 41
+/$ 40 dup contact
+\n
+<TX>\n
+<CALL> <CALL> \n
+Duplicate Contact\n
+Tnx and GL\n
+<MYCALL> 73 sk\n
+<RX>
+
+//
+// Macro # 42
+/$ 41 repeat
+\n
+<tx>\n
+<CALL> de <MYCALL>\n
+Please repeat class and section\n
+<CALL> de <MYCALL> k\n
+<RX>
+
+//
+// Macro # 43
+/$ 42 qrz
+\n
+<TX>\n
+QRZ? QRZ?\n
+de <MYCALL> k\n
+<RX>
+
+//
+// Macro # 44
+/$ 43 Answer CQ
+\n
+<TX>\n
+<CALL> <CALL> de <MYCALL> <MYCALL> k\n
+<RX>
+
+//
+// Macro # 45
+/$ 44 psk31
+<MODEM:BPSK31>
+
+
+//
+// Macro # 46
+/$ 45 RTTY
+<MODEM:RTTY>
+
+
+//
+// Macro # 47
+/$ 46 
+
+
+//
+// Macro # 48
+/$ 47 Station ID
+\n
+<TX>\n
+DE kc7sda operating as <MYCALL>\n
+<RX>
