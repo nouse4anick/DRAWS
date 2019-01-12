@@ -435,7 +435,7 @@ if [ $# -gt 0 ]; then
 			"fdlog" ) fdlog_install ;;
 			"check" ) System_check ;;
 			"flsuite" ) FLSUITE ;;
-			"beta" ) beta ;;
+			"beta" ) Beta ;;
 			"-h" ) Usage ;;
 		esac
 		shift
