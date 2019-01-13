@@ -250,7 +250,8 @@ chrony_setup (){
 ###############
 Xastir_install () {
 	#note: use graphicsmagick, breaks with imagemagic
-	sudo apt-get remove imagemagick -y
+	# remove libax25 as well as leaving it installed breaks the rest of the library install
+	sudo apt-get remove imagemagick libax25 -y
 	#check for xastir
 	sudo dpkg -l | grep 'xastir' > /dev/null
 	xastircheck=$?
