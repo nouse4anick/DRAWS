@@ -396,6 +396,7 @@ FLDIGICUR=4.0.18
 FLAMPCUR=2.2.03
 FLMSGCUR=4.0.7
 FLWRAP=1.3.5
+echo "WARINGING: This script is for pre-beta 13 and for 'blank' from scratch installs. do NOT use for beta 13 and higher from nwdigital radio!"
 echo "To view optional arguments use './install.sh -h'"
 echo "This script will install all software nessecay for the DRAWS, it will pull down and run the NW digital radio script from the github repository"
 echo "This script will also install the following versions of fldigi/flamp/flmsg:"
