@@ -22,9 +22,14 @@ other items that will be of some use:
 - field day logger program
 - other utilites that are helpful
 
-Current status:
+Status:
 12/23/18:
 - checked xastir and direwolf, direwolf works but xastir's version is too old, modified script to install libraries and from source
 - fldigi installs correctly, gps and chrony also install with config files
 - code flows better, consolidated and refractored code
 - better comments and whitespace
+
+5/18/19:
+- As of NW Digital's Beta 13 build 90% of the 'install' script is pointless. Will add functionality instead to copy some setup files (fldigi macros and the like)
+- copy desktop shortcuts still needed
+- need to re-write code so installs happen from /usr/local/src and not the user directory.

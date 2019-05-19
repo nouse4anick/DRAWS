@@ -295,7 +295,7 @@ Xastir_install () {
 	#copy all config files
 	cd ~
 	cp ~/DRAWS/direwolf.conf ~/direwolf.conf
-	cp ~/DRAWS/xastir/xastir.cnf ~/.xastir/config/xastir.cnf
+	#cp ~/DRAWS/xastir/xastir.cnf ~/.xastir/config/xastir.cnf
 	cp ~/DRAWS/desktop/xastir.desktop ~/Desktop/xastir.desktop
 	cp ~/DRAWS/desktop/direwolf.desktop ~/Desktop/direwolf.desktop
 	
